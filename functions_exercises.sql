@@ -94,4 +94,13 @@ FROM employees
 WHERE last_name LIKE 'E%'
 ORDER BY emp_no DESC;
 
+# Find all employees with a last name that starts and ends with an 'e' and concat()
+#the first and last name together
+SELECT CONCAT(first_name,' ', last_name)
+FROM employees
+WHERE last_name LIKE 'E%'
+  AND last_name LIKE '%e';
+
+
+
 
