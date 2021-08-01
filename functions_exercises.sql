@@ -101,6 +101,37 @@ FROM employees
 WHERE last_name LIKE 'E%'
   AND last_name LIKE '%e';
 
+# Find all employees born on christmas
+SELECT *
+FROM employees
+WHERE month(birth_date) = 12
+    AND day(birth_date) = 25;
 
+
+# Find all employees hired in the 90s and born on Christmas
+SELECT *
+FROM employees
+where year(hire_date) BETWEEN 1990 AND 1999
+    AND month(birth_date) = 12
+    AND day(birth_date) = 25;
+
+# Find all employees hired in the 90s and born on Christmas
+# So that the oldest empoyee who was hired last is first
+SELECT *
+FROM employees
+where year(hire_date) BETWEEN 1990 AND 1999
+    AND month(birth_date) = 12
+    AND day(birth_date) = 25
+    ORDER BY hire_date DESC;
+
+
+# Query of employees born on christmas and hired in the 90s
+# and using datediff() to find how many days they been working
+# at the company
+SELECT datediff(now(), hire_date), concat(first_name, ' ', last_name), hire_date
+FROM employees
+where year(hire_date) BETWEEN 1990 AND 1999
+  AND month(birth_date) = 12
+  AND day(birth_date) = 25;
 
 
