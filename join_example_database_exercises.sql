@@ -1,38 +1,57 @@
-use employees;
+CREATE DATABASE IF NOT EXISTS join_test_db;
 
-SELECT d.dept_name, CONCAT(e.first_name, ' ', e.last_name) AS full_name
-from dept_manager as dm
-         join employees e
-              on e.emp_no = dm.emp_no
-         join departments d
-              on d.dept_no = dm.dept_no
-where to_date ='9999-01-01'
-order by dept_name;
+USE join_test_db;
 
-SELECT d.dept_name, CONCAT(e.first_name, ' ', e.last_name) AS full_name
-from dept_manager as dm
-         join employees e
-              on e.emp_no = dm.emp_no
-         join departments d
-              on d.dept_no = dm.dept_no
-where to_date ='9999-01-01' and e.gender = 'F'
-order by dept_name;
+CREATE TABLE roles
+(
+    id   INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    name VARCHAR(100) NOT NULL,
+    PRIMARY KEY (id)
+);
 
-SELECT title, count(*) Total
-from titles as t
-         join employees e
-              on e.emp_no = t.emp_no
-         join dept_emp de
-              on e.emp_no = de.emp_no
-group by title;
+CREATE TABLE users
+(
+    id      INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    name    VARCHAR(100) NOT NULL,
+    email   VARCHAR(100) NOT NULL,
+    role_id INT UNSIGNED DEFAULT NULL,
+    PRIMARY KEY (id),
+    FOREIGN KEY (role_id) REFERENCES roles (id)
+);
 
-SELECT d.dept_name, CONCAT(e.first_name, ' ', e.last_name) AS full_name, salary
-from dept_manager as dm
-         join employees e
-              on e.emp_no = dm.emp_no
-         join salaries s
-              on e.emp_no = s.emp_no
-         join departments d
-              on d.dept_no = dm.dept_no
-where dm.to_date = '9999-01-01' and s.to_date = '9999-01-01'
-order by dept_name;
+INSERT INTO roles (name)
+VALUES ('admin');
+INSERT INTO roles (name)
+VALUES ('author');
+INSERT INTO roles (name)
+VALUES ('reviewer');
+INSERT INTO roles (name)
+VALUES ('commenter');
+INSERT INTO users (name, email, role_id)
+VALUES ('bob', 'bob@example.com', 1),
+       ('joe', 'joe@example.com', 2),
+       ('sally', 'sally@example.com', 3),
+       ('adam', 'adam@example.com', 3),
+       ('jane', 'jane@example.com', null),
+       ('mike', 'mike@example.com', null);
+
+#2
+INSERT INTO users (name, email, role_id) VALUES
+('jim bob', 'jimbob@exmaple.com', null),
+('clyde', 'clyde@exmaple.com',2),
+('vegeta', 'vegeta@exmaple.com',2),
+('kakarot', 'kakarot@exmaple.com',2);
+SELECT * FROM users;
+
+#3
+SELECT u.name as user_name, r.name as role_name
+FROM users u
+         RIGHT JOIN roles r on u.role_id = r.id;
+INSERT INTO users (name, email, role_id)
+VALUES ('jim bob', 'jimbob@example.com', 4);
+
+#4
+SELECT r.name, COUNT(r.name) as 'Role Count'
+FROM users u
+         JOIN roles r on u.role_id = r.id
+GROUP BY r.name;
