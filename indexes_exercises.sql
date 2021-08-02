@@ -14,10 +14,7 @@ USE codeup_test_db;
 DESCRIBE albums;
 
 ALTER TABLE albums
-ADD UNIQUE(artist);
-
-ALTER TABLE albums
-ADD UNIQUE(name);
+ADD CONSTRAINT UNIQUE(name, artist);
 
 INSERT INTO albums(artist, name, release_date, sales, genre) VALUES
 ('Oasis', '(What''s The Story) Morning Glory?', '1995', 22.2, 'Britpop, rock');
